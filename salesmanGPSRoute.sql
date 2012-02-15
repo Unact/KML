@@ -1,19 +1,7 @@
-create or replace function dbo.salesmanGPSRoute(in @url long varchar)
+create or replace function dbo.salesmanGPSRoute()
 returns xml
 begin
-    declare @offset integer;
-    declare @type varchar(128);
-    declare @varName varchar(128);
-    declare @varValue varchar(128);
-    declare @i integer;  
-    
     declare @result xml;
-    
-    create variable @salesman_id integer;
-    create variable @ddate datetime;
-    
-    message 'dbo.salesmanGPSRoute @url =', @url;
-
 
     
     create local temporary table #tracking(latitude decimal(13,10),
@@ -34,50 +22,9 @@ begin
                                            ts datetime,
                                            primary key(buyer));
                                             
-    set @varName = next_http_variable(null);                                        
 
-    while @varName is not null loop
-        set @varValue = http_variable(@varName);
-        
-        case @varName
-            when 'salesman' then
-                set @salesman_id = cast(@varValue as integer);
-            when 'offset' then
-                set @offset = cast(@varValue as integer);
-            when 'type' then
-                set @type = @varValue;
-        end case;
-        
-        set @varName = next_http_variable(@varName);
-        
-    end loop;
-    
-    if length(@url)<>0 then
-        set @i = locate(@url,'/');
-        if @i<>0 then
-            if isnumeric(left(@url,@i-1))=1 then
-                set @salesman_id = cast(left(@url,@i-1) as integer);
-            end if;
-            if isnumeric(substring(@url,@i+1))=1 then
-                set @offset = cast(substring(@url,@i+1) as integer);
-            end if
-        else
-            if isnumeric(@url)=1 then
-                set @salesman_id = cast(@url as integer);
-            end if   
-        end if;
-    end if;
-    
 
-    if @offset is null then set @offset = 0 end if;
-    if @type is null then set @type = 'kml' end if;
-    
-    set @ddate = today() - @offset;
-    
-
-    -- route
-
-       
+    -- route     
     insert into #waypoint with auto name   
     select p.id as buyer,
            p.name as name,
