@@ -26,7 +26,15 @@ begin
     end for;
     
     set @result = dbo.KMLRootTag(xmlelement('Document', xmlelement('name',@name)
-                                                      , xmlelement('Placemark', xmlelement('name', 'Юг')
+                                                      , xmlelement('Placemark', xmlelement('name', 'Scale')
+                                                                              , xmlelement('visibility',0)
+                                                                              , xmlelement('LineString', xmlelement('coordinates', '37.501284,55.84291'))
+                                                                              )
+                                                      , xmlelement('Placemark', xmlelement('name', 'Scale2')
+                                                                              , xmlelement('visibility',0)
+                                                                              , xmlelement('LineString', xmlelement('coordinates', '37.801208,55.468346'))
+                                                                              )
+                                                      /*, xmlelement('Placemark', xmlelement('name', 'Север')
                                                                               , xmlelement('description',cast('<![CDATA['
                                                                                          +'<font color="blue">'+'Склад "Север"'+'</font><br>'
                                                                                          + ']]>' as xml))
@@ -35,7 +43,7 @@ begin
                                                                               , xmlelement('description',cast('<![CDATA['
                                                                                          +'<font color="blue">'+'Склад "Юг"'+'</font><br>'
                                                                                          + ']]>' as xml))
-                                                                              , xmlelement('Point', xmlelement('coordinates', '37.801208,55.468346')))
+                                                                              , xmlelement('Point', xmlelement('coordinates', '37.801208,55.468346')))*/
                                                       , @result));
     
 

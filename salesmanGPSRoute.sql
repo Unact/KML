@@ -10,6 +10,7 @@ begin
                                            accuracy decimal(18,2));
                                             
     create local temporary table #waypoint(buyer integer,
+                                           partner integer,
                                            name varchar(255),
                                            address varchar(1024),
                                            latitude decimal(13,10),
@@ -26,28 +27,25 @@ begin
 
     -- route     
     insert into #waypoint with auto name   
-    select p.id as buyer,
+    select min(b.id) as buyer,
+           p.id as partner,
            p.name as name,
            min(b.loadto) as address,
            count(*) as orderCnt,
            sum(totalCost) as orderSumm,
-           max(device_ts) as ts,
-           isnull(ga.latitude,pu.latitude) as latitude,
-           isnull(ga.longitude,pu.longitude) as longitude
+           max(o.device_ts) as ts,
+           pu.latitude as latitude,
+           pu.longitude as longitude
       from dbo.pre_order o join dbo.buyers b on o.client = b.id
                            join dbo.partners p on b.partner = p.id
-                           left outer join dbo.geoaddress ga on b.geoaddressid = ga.id
                            left outer join dbo.placeunload pu on b.placeunload_id = pu.id
      where o.salesman = @salesman_id
        and o.cts >= @ddate
        and o.cts < @ddate + 1
-     group by p.id, p.name, ga.latitude, pu.latitude, ga.longitude, pu.longitude;
+     group by p.id, p.name, pu.latitude, pu.longitude;
      
     delete from #waypoint
       where latitude is null;
-    
-
-                  
     
     -- tracking
     insert into #tracking with auto name
