@@ -5,7 +5,7 @@ begin
     declare @type varchar(128);
     declare @varName varchar(128);
     declare @varValue varchar(128);
-    declare @i integer;
+    declare @i integer;  
     
     declare @result xml;
     

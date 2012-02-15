@@ -2,7 +2,7 @@ create or replace function dbo.KMLRoute()
 returns xml
 begin
     declare @result xml;
-    declare @placemarks xml;
+    declare @placemarks xml; 
     declare @route xml;
     declare @trkName varchar(128);
     declare @description long varchar;

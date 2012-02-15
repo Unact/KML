@@ -1,7 +1,7 @@
 create or replace function dbo.GPXRoute()
 returns xml
 begin
-    declare @result xml;
+    declare @result xml; 
     
     declare @trk xml;
     declare @wpt xml;
