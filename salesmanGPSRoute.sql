@@ -75,6 +75,9 @@ begin
     elseif @type = 'kml' then
         set @result = dbo.KMLRoute();
     end if;
+    
+    drop table #tracking;
+    drop  table #waypoint;
 
     return @result;
     
