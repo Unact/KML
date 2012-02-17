@@ -14,7 +14,7 @@ begin
     
     set @style = dbo.kmlStyle(null,1);
     
-    set @href = 'https://asa0.unact.ru/kml/n'+cast(@unit_id as varchar(12));
+    set @href = 'https://asa0.unact.ru/kml/n'+cast(@unit_id as varchar(12))+'/'+cast(@offset as varchar(12));
     
     set @result = xmlelement('NetworkLink', xmlelement('Link', @refresh
                                                              , xmlelement('href',@href)));
