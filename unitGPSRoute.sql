@@ -4,9 +4,7 @@ begin
     declare @result xml;
     declare @name varchar(128);
     declare @description xml;
-    declare @refresh xml;
     declare @style xml;
-    declare @href long varchar;
     declare @orderCnt integer;
     declare @orderSumm decimal(18,2);
     declare @buyerCnt integer;
@@ -28,24 +26,20 @@ begin
        and o.cts >= @ddate
        and o.cts < @ddate + 1;
     
-    set @description =  cast('<![CDATA['
-                         +'<br>'
-                         +'<font color="blue">'
+    set @description =  cast('<div xmlns="http://www.w3.org/1999/xhtml">'
+                         +'<ul>'
+                         +'<li><font color="blue">'
                          +'Посещено точек: '+ cast(@buyerCnt as varchar(12))
-                         +'</font>'+'<br>'
-                         +'<font color="blue">'
+                         +'</font></li>'
+                         +'<li><font color="blue">'
                          +'Всего заказов: '+ cast(@orderCnt as varchar(12))
-                         +'</font>'+'<br>'
-                         +'<font color="purple">'
+                         +'</font></li>'
+                         +'<li><font color="purple">'
                          +'На сумму: '+ cast(@orderSumm as varchar(12))
-                         +'<br><br>'
-                         + ']]>' as xml);
-              
-    if @offset = 0  then
-        set @refresh = xmlelement('refreshMode','onInterval')+xmlelement('refreshInterval',60);
-    else
-        set @refresh = xmlelement('refreshMode','onInterval')+xmlelement('refreshInterval',60000); 
-    end if;
+                         +'</font></li>'
+                         +'</ul>'
+                         + '</div>' as xml);
+
     
     for lloop as ccur cursor for select salesman_id as c_salesman_id,
                                         name as c_name
@@ -53,30 +47,13 @@ begin
                                   where salesman_group = @unit_id
     do
     
-        set @href = 'https://asa0.unact.ru/kml/'+cast(c_salesman_id as varchar(12))
-                  + '/' + cast(@offset as varchar(12));
-    
-        set @result = @result + xmlelement('NetworkLink', xmlelement('name', c_name)
-                                                        , xmlelement('Link', @refresh
-                                                                           , xmlelement('href', @href)));
+        set @result = @result + dbo.salesmanGPSRoute(c_salesman_id, 1);
                                                                            
     end for;
     
     set @result = dbo.KMLRootTag(xmlelement('Document', @style
                                                       , xmlelement('name',@name)
                                                       , xmlelement('description', @description)
-                                                      , xmlelement('Placemark', xmlelement('name', 'Север')
-                                                                              , xmlelement('description',cast('<![CDATA['
-                                                                                         +'<font color="blue">'+'Склад "Север"'+'</font><br>'
-                                                                                         + ']]>' as xml))
-                                                                              , xmlelement('styleUrl','#Storage')
-                                                                              , xmlelement('Point', xmlelement('coordinates', '37.501284,55.84291')))
-                                                      , xmlelement('Placemark', xmlelement('name', 'Юг')
-                                                                              , xmlelement('description',cast('<![CDATA['
-                                                                                         +'<font color="blue">'+'Склад "Юг"'+'</font><br>'
-                                                                                         + ']]>' as xml))
-                                                                              , xmlelement('styleUrl','#Storage')  
-                                                                              , xmlelement('Point', xmlelement('coordinates', '37.729269,55.472572')))
                                                       , @result));
     
 

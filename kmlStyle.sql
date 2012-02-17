@@ -17,7 +17,7 @@ begin
           '7fff0000' as iconColor,
           'http://maps.google.com/mapfiles/kml/paddle/blu-circle.png' as iconUrl
     union
-    select 1, 'bf00ff00', '7f00ff00', 'http://maps.google.com/mapfiles/kml/paddle/grn-circle.png'
+    select 1, '7feaff7c', '7feaff7c', 'http://maps.google.com/mapfiles/kml/paddle/ltblu-circle.png'
     union
     select 2, '7f0000ff', '7f0000ff', 'http://maps.google.com/mapfiles/kml/paddle/red-circle.png'
     union 

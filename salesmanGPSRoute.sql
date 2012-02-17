@@ -1,4 +1,4 @@
-create or replace function dbo.salesmanGPSRoute()
+create or replace function dbo.salesmanGPSRoute(in @salesman_id integer, in @callType integer default 0)
 returns xml
 begin
     declare @result xml;
@@ -73,7 +73,7 @@ begin
     if @type = 'gpx' then
         set @result = dbo.GPXRoute();
     elseif @type = 'kml' then
-        set @result = dbo.KMLRoute();
+        set @result = dbo.KMLRoute(@salesman_id,@callType);
     end if;
     
     drop table #tracking;

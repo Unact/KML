@@ -5,6 +5,7 @@ begin
     declare @varName varchar(128);
     declare @varValue varchar(128);
     declare @i integer;
+    declare @unitType varchar(12);
     
     create variable @salesman_id integer;
     create variable @unit_id integer;
@@ -37,8 +38,9 @@ begin
         if @i<>0 then
             if isnumeric(left(@url,@i-1))=1 then
                 set @salesman_id = cast(left(@url,@i-1) as integer);
-            elseif left(@url,1) = 'b' and isnumeric(substring(left(@url,@i-1),2)) = 1 then
+            elseif left(@url,1) in ('b','n') and isnumeric(substring(left(@url,@i-1),2)) = 1 then
                 set @unit_id = cast(substring(left(@url,@i-1),2) as integer);
+                set @unitType =  left(@url,1); 
             end if;
             if isnumeric(substring(@url,@i+1))=1 then
                 set @offset = cast(substring(@url,@i+1) as integer);
@@ -46,8 +48,9 @@ begin
         else
             if isnumeric(@url)=1 then
                 set @salesman_id = cast(@url as integer);
-            elseif left(@url,1) = 'b' and isnumeric(substring(@url,2)) = 1 then
+            elseif left(@url,1) in ('b','n') and isnumeric(substring(@url,2)) = 1 then
                 set @unit_id = cast(substring(@url,2) as integer);
+                set @unitType =  left(@url,1);
             end if   
         end if;
     end if;
@@ -60,8 +63,12 @@ begin
     
     if @salesman_id is not null then
         set @result = dbo.salesmanGPSRoute();
-    elseif @unit_id is not null then
+    elseif @unit_id is not null and @unitType = 'n' then
         set @result = dbo.unitGPSRoute();
+    elseif @unit_id is not null and @unitType = 'b' then
+        set @result = dbo.unitGPSRouteN();
+    else
+        set @result = dbo.mainGPSRoute(@offset);
     end if;
     
     return @result;
