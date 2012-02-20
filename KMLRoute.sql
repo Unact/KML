@@ -72,7 +72,7 @@ begin
                                                                   , xmlelement('description',cast('<div xmlns="http://www.w3.org/1999/xhtml">'
                                                                                                  +'Начало маршрута ТП '+ @tpName + ' '+ cast(cast(ts as time) as varchar(5))
                                                                                                  + '</div>' as xml))
-                                                                  , xmlelement('styleUrl','#RouteBegin')
+                                                                  , xmlelement('styleUrl','#RouteBegin'+cast(@styleNumber as varchar(12)))
                                                                   , xmlelement('Point', xmlelement('coordinates', cast(longitude as varchar(24))+','+cast(latitude as varchar(24)))))
                                  from #tracking
                                 order by ts)
@@ -80,7 +80,7 @@ begin
                                                                   , xmlelement('description',cast('<div xmlns="http://www.w3.org/1999/xhtml">'
                                                                                                  +'Конец маршрута ТП '+ @tpName + ' '+ cast(cast(ts as time) as varchar(5))
                                                                                                  + '</div>' as xml))
-                                                                  , xmlelement('styleUrl','#RouteEnd')
+                                                                  , xmlelement('styleUrl','#RouteEnd'+cast(@styleNumber as varchar(12)))
                                                                   , xmlelement('Point', xmlelement('coordinates', cast(longitude as varchar(24))+','+cast(latitude as varchar(24)))))
                                  from #tracking
                                 order by ts desc)
