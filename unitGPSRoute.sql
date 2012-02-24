@@ -29,10 +29,10 @@ begin
     set @description =  cast('<div xmlns="http://www.w3.org/1999/xhtml">'
                          +'<ul>'
                          +'<li><font color="blue">'
-                         +'Посещено точек: '+ cast(@buyerCnt as varchar(12))
+                         +'Кол-во адресов с заказами: '+ cast(@buyerCnt as varchar(12))
                          +'</font></li>'
                          +'<li><font color="blue">'
-                         +'Всего заказов: '+ cast(@orderCnt as varchar(12))
+                         +'Кол-во накладных: '+ cast(@orderCnt as varchar(12))
                          +'</font></li>'
                          +'<li><font color="purple">'
                          +'На сумму: '+ cast(@orderSumm as varchar(12))
