@@ -24,13 +24,16 @@ begin
                          +'Конец: '+cast(cast((select max(ts) from #tracking) as time) as varchar(5))+' '
                          +'</font></li>'
                          +'<li><font color="green">'
-                         +'Заказов: '+ cast((select sum(orderCnt) from #waypoint) as varchar(12))+' '
+                         +'Адресов: '+ cast((select count(*) from #waypoint) as varchar(12))+' '
+                         +'</font></li>'
+                         +'<li><font color="green">'
+                         +'Накладных: '+ cast((select sum(orderCnt) from #waypoint) as varchar(12))+' '
                          +'</font></li>'
                          +'<li><font color="purple">'
                          +'На сумму: '+ cast((select sum(orderSumm) from #waypoint) as varchar(12))+' '
                          +'</font></li>'
                          +'</ul>'
-                         + '</div>' as xml);
+                         + ']]>' as xml);
                          
     end if;
     
