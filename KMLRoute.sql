@@ -33,7 +33,7 @@ begin
                          +'На сумму: '+ cast((select sum(orderSumm) from #waypoint) as varchar(12))+' '
                          +'</font></li>'
                          +'</ul>'
-                         + ']]>' as xml);
+                         + '</div>' as xml);
                          
     end if;
     
