@@ -12,28 +12,16 @@ begin
     
     
     set @tpName = (select name from dbo.palm_Salesman where salesman_id = @salesman_id);
-    set @trkName = @tpName + ' ' + cast(date(@ddate) as varchar(10));
+    set @trkName = @tpName + ' ' + cast(date(@ddate) as varchar(10))
+                 + ' [' +cast(cast((select min(ts) from #tracking) as time) as varchar(5))+'-'
+                    +cast(cast((select max(ts) from #tracking) as time) as varchar(5))+']';
     
     if exists(select * from #tracking) then             
-        set @description = cast('<div xmlns="http://www.w3.org/1999/xhtml">'
-                         +'<ul>'
-                         +'<li><font color="red">'
-                         +'Начало: '+cast(cast((select min(ts) from #tracking) as time) as varchar(5))+' '
-                         +'</font></li>'
-                         + '<li><font color="blue">'
-                         +'Конец: '+cast(cast((select max(ts) from #tracking) as time) as varchar(5))+' '
-                         +'</font></li>'
-                         +'<li><font color="green">'
+        set @description = cast(
                          +'Адресов: '+ cast((select count(*) from #waypoint) as varchar(12))+' '
-                         +'</font></li>'
-                         +'<li><font color="green">'
                          +'Накладных: '+ cast((select sum(orderCnt) from #waypoint) as varchar(12))+' '
-                         +'</font></li>'
-                         +'<li><font color="purple">'
                          +'На сумму: '+ cast((select sum(orderSumm) from #waypoint) as varchar(12))+' '
-                         +'</font></li>'
-                         +'</ul>'
-                         + '</div>' as xml);
+                         as xml);
                          
     end if;
     
@@ -48,11 +36,11 @@ begin
     if exists (select * from #waypoint) then
         set @placemarks = (select xmlagg(xmlelement('Placemark', xmlelement('name', name)
                                                                , xmlelement('description',cast('<div xmlns="http://www.w3.org/1999/xhtml">'
-                                                                                         +'<div><font size="2">'+address+'</font></div>'
-                                                                                         +'<div><font color="red">'+ cast(cast(ts as time) as varchar(5))+'</font></div>'
+                                                                                         +'<div><font size="2">'+address+' </font></div>'
+                                                                                         +'<div><font color="red">'+ cast(cast(ts as time) as varchar(5))+' </font></div>'
                                                                                          + '<ul>'
-                                                                                         + '<li>Заказов='+cast(orderCnt as varchar(12))+'</li>'
-                                                                                         + '<li>сумма=' + cast(orderSumm as varchar(16))+'</li>'
+                                                                                         + '<li>Заказов='+cast(orderCnt as varchar(12))+' </li>'
+                                                                                         + '<li>сумма=' + cast(orderSumm as varchar(16))+' </li>'
                                                                                          + '</ul>'
                                                                                          + '</div>' as xml))
                                                                 , xmlelement('styleUrl','#Style'+cast(@styleNumber as varchar(12)))
