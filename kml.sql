@@ -62,7 +62,7 @@ begin
     set @ddate = today() - @offset;
     
     if @salesman_id is not null then
-        set @result = dbo.salesmanGPSRoute();
+        set @result = dbo.salesmanGPSRoute(@salesman_id);
     elseif @unit_id is not null and @unitType = 'n' then
         set @result = dbo.unitGPSRoute();
     elseif @unit_id is not null and @unitType = 'b' then
