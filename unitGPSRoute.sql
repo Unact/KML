@@ -41,7 +41,7 @@ begin
                          + '</div>' as xml);
 
     
-    for lloop as ccur cursor for select salesman_id as c_salesman_id,
+    for lloop as ccur cursor for select id as c_salesman_id,
                                         name as c_name
                                    from sales.salesman
                                   where salesman_group = @unit_id

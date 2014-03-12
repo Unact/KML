@@ -4,12 +4,12 @@ begin
     declare @result xml;
 
     
-    create local temporary table #tracking(latitude decimal(13,10),
+    declare local temporary table #tracking(latitude decimal(13,10),
                                            longitude decimal(13,10),
                                            ts datetime,
                                            accuracy decimal(18,2));
                                             
-    create local temporary table #waypoint(buyer integer,
+    declare local temporary table #waypoint(buyer integer,
                                            partner integer,
                                            name varchar(255),
                                            address varchar(1024),
@@ -76,9 +76,6 @@ begin
         set @result = dbo.KMLRoute(@salesman_id,@callType);
     end if;
     
-    drop table #tracking;
-    drop  table #waypoint;
-
     return @result;
     
 end
